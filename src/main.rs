@@ -23,14 +23,18 @@ fn test_run_python_script() -> Result<(), Box<dyn std::error::Error>> {
 
 fn test_call_python_function() -> Result<(), Box<dyn std::error::Error>> {
     pyo3::prepare_freethreaded_python();
-    let script_path = "../src/bar.py";
-    let function_name = "my_test_function";
-    let input_data = "test_input";
 
-    let result = utils::call_python_function(script_path, function_name, input_data)?;
+    // let result = utils::call_python_function(script_path, function_name, input_data)?;
+    let result: String =
+        utils::call_python_function("../src/bar.py", "string_function", "test_input")?;
 
     info!("Function result: {}", result);
     assert_eq!(result, "test_input_processed");
+
+    let result: i32 = utils::call_python_function("../src/bar.py", "sum_function", (42, 42))?;
+
+    info!("Function result: {}", result);
+    assert_eq!(result, 84);
 
     Ok(())
 }
