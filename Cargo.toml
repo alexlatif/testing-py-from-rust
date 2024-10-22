@@ -1,0 +1,13 @@
+[package]
+name = "testing"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1.0.90"
+pyo3 = { version = "0.22.5" } # features = ["extension-module"] }
+tracing = "0.1.40"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+
+[package.metadata.pyo3]
+python-path = ".venv/bin/python3"
