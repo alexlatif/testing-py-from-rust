@@ -10,11 +10,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         ))
         .init();
 
+    pyo3::prepare_freethreaded_python();
+
     run_tests!(test_run_python_script, test_call_python_function);
 }
 
 fn test_run_python_script() -> Result<(), Box<dyn std::error::Error>> {
-    let script_path = "../src/bar.py";
+    let script_path = "./testing/example.py";
     let args = ["service_b", r#"{"smoothing": 1}"#];
     utils::run_python_script(script_path, &args)?;
 
@@ -22,16 +24,14 @@ fn test_run_python_script() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn test_call_python_function() -> Result<(), Box<dyn std::error::Error>> {
-    pyo3::prepare_freethreaded_python();
-
-    // let result = utils::call_python_function(script_path, function_name, input_data)?;
     let result: String =
-        utils::call_python_function("../src/bar.py", "string_function", "test_input")?;
+        utils::call_python_function("./testing/example.py", "string_function", "test_input")?;
 
     info!("Function result: {}", result);
     assert_eq!(result, "test_input_processed");
 
-    let result: i32 = utils::call_python_function("../src/bar.py", "sum_function", (42, 42))?;
+    let result: i32 =
+        utils::call_python_function("./testing/example.py", "sum_function", (42, 42))?;
 
     info!("Function result: {}", result);
     assert_eq!(result, 84);
